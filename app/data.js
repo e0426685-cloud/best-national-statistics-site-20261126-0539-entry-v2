@@ -138,3 +138,61 @@ export const COUNTRY = {
   currency: 'Meridian dollar (M$)',
   updated: '20 November 2026',
 };
+
+// ---------------------------------------------------------------------------
+// Renewable electricity, 2015-2025.
+//
+// Share of total electricity generation from renewable sources, percent.
+// The series is illustrative, composed for this site like every other series
+// here. It rises steadily across the decade: hydro, the historic backbone,
+// grows only slowly because the best river sites were already dammed, while
+// wind and especially solar do most of the climbing. The 2020 step is the
+// first big offshore wind farm coming online; the 2023-2025 solar jump
+// follows the rooftop subsidy that began in late 2022.
+//
+// RENEWABLE_MIX breaks each year's total into its four sources. The four
+// parts of a row always add up to the matching RENEWABLE_SHARE value for
+// that year, so the table and the chart built from it can never disagree.
+// ---------------------------------------------------------------------------
+
+// Renewable share of electricity generation, percent, one value per year.
+export const RENEWABLE_SHARE = [24.1, 26.4, 28.8, 31.6, 34.8, 38.2, 41.5, 44.3, 46.6, 47.6, 49.1];
+
+// Renewable generation by source, percent of total electricity generation.
+// "Other" covers biomass, geothermal and small-scale hydro.
+export const RENEWABLE_MIX = [
+  { year: 2015, hydro: 14.2, wind: 5.1, solar: 1.8, other: 3.0 },
+  { year: 2016, hydro: 14.8, wind: 6.0, solar: 2.4, other: 3.2 },
+  { year: 2017, hydro: 15.1, wind: 7.2, solar: 3.1, other: 3.4 },
+  { year: 2018, hydro: 15.6, wind: 8.4, solar: 4.0, other: 3.6 },
+  { year: 2019, hydro: 16.0, wind: 9.8, solar: 5.2, other: 3.8 },
+  { year: 2020, hydro: 16.4, wind: 11.0, solar: 6.8, other: 4.0 },
+  { year: 2021, hydro: 16.9, wind: 12.1, solar: 8.4, other: 4.1 },
+  { year: 2022, hydro: 17.2, wind: 13.0, solar: 9.9, other: 4.2 },
+  { year: 2023, hydro: 17.5, wind: 13.6, solar: 11.2, other: 4.3 },
+  { year: 2024, hydro: 17.6, wind: 13.8, solar: 11.9, other: 4.3 },
+  { year: 2025, hydro: 17.8, wind: 14.6, solar: 12.4, other: 4.3 },
+];
+
+// Metadata for the renewable indicator: what it measures, where the
+// illustrative figures come from, and what is deliberately left out.
+export const RENEWABLE_META = {
+  indicator: 'Renewable share of electricity generation',
+  unit: '% of total electricity generation',
+  coverage: 'All grid-connected generation in Meridia, 2015–2025',
+  sources: ['Hydro', 'Wind', 'Solar', 'Other (biomass, geothermal, small hydro)'],
+  sourceNote: 'Illustrative series composed for demonstration, built from the '
+    + 'Meridian Energy Survey returns and cross-checked against installed '
+    + 'capacity records. Not a measurement of any real country.',
+  exclusions: 'Off-grid household solar and imported electricity are excluded; '
+    + 'the denominator is generation inside Meridia only.',
+  latest: 2025,
+  changeSince2015: 25.0, // percentage points, 49.1 minus 24.1
+  fastestSource: 'Solar',
+  notes: [
+    'Hydro grows slowly: the large river schemes predate 2015.',
+    'Wind steps up in 2020 when the first offshore farm connects.',
+    'Solar accelerates from 2023 under the rooftop subsidy.',
+    'Shares are of generation (MWh), not of installed capacity (MW).',
+  ],
+};

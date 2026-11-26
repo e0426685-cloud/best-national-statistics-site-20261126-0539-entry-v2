@@ -109,3 +109,47 @@ export function hbarList({ items, title, unit = '', format = (v) => fmt(v, 0) })
   </div>`).join('');
   return `<div class="hbar-list" role="img" aria-label="${esc(title)}">${rows}</div>`;
 }
+
+// Stacked vertical bars: one bar per label, each bar split into segments
+// that add up to the bar total. series is [{ label, values, color }], with
+// one value per label, in the same order as labels. A legend sits above the
+// plot; the total is printed on top of each bar. Negative values are not
+// supported — every segment stacks upward from the previous one.
+export function stackedBarChart({ labels, series, title, unit = '', height = 280 }) {
+  const W = 640, H = height, padL = 52, padR = 14, padT = 38, padB = 34;
+  const totals = labels.map((_, i) => series.reduce((sum, sg) => sum + sg.values[i], 0));
+  const top = Math.max(...totals) * 1.12;
+  const slot = (W - padL - padR) / labels.length;
+  const yFor = (v) => padT + ((top - v) / top) * (H - padT - padB);
+  const base = yFor(0);
+  const gridLines = [0.25, 0.5, 0.75, 1].map((f) => {
+    const gv = top * f;
+    return `<line x1="${padL}" y1="${yFor(gv)}" x2="${W - padR}" y2="${yFor(gv)}" stroke="#e3e8ee" stroke-width="1"/>
+    <text x="${padL - 8}" y="${yFor(gv) + 4}" text-anchor="end" font-size="11" fill="#5a6b7c">${fmt(gv, 0)}</text>`;
+  }).join('');
+  const bars = labels.map((lab, i) => {
+    let running = 0;
+    const segments = series.map((sg) => {
+      const v = sg.values[i];
+      const yTop = yFor(running + v);
+      const segH = yFor(running) - yTop;
+      running += v;
+      return `<rect x="${(padL + i * slot + slot * 0.16).toFixed(1)}" y="${yTop.toFixed(1)}" width="${(slot * 0.68).toFixed(1)}" height="${Math.max(segH, 0.5).toFixed(1)}" fill="${sg.color}">
+      <title>${esc(lab)} — ${esc(sg.label)}: ${fmt(v, 1)}${unit}</title></rect>`;
+    }).join('');
+    const totalLab = `<text x="${(padL + i * slot + slot / 2).toFixed(1)}" y="${(yFor(totals[i]) - 6).toFixed(1)}" text-anchor="middle" font-size="11" fill="#33475b" font-weight="600">${fmt(totals[i], 1)}</text>`;
+    const xLab = `<text x="${(padL + i * slot + slot / 2).toFixed(1)}" y="${H - 10}" text-anchor="middle" font-size="11" fill="#5a6b7c">${esc(lab)}</text>`;
+    return `<g>${segments}${totalLab}${xLab}</g>`;
+  }).join('');
+  const legend = series.map((sg, k) => `<g>
+    <rect x="${padL + k * 118}" y="10" width="13" height="13" rx="3" fill="${sg.color}"/>
+    <text x="${padL + k * 118 + 19}" y="21" font-size="12" fill="#22344a">${esc(sg.label)}</text>
+  </g>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}" class="chart">
+  <title>${esc(title)}</title>
+  ${legend}
+  ${gridLines}
+  ${bars}
+  <line x1="${padL}" y1="${base}" x2="${W - padR}" y2="${base}" stroke="#c8d2dc" stroke-width="1"/>
+</svg>`;
+}
