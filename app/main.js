@@ -8,6 +8,9 @@
 //   #/education       schooling and literacy
 //   #/regions         sortable, searchable regional table
 //   #/compare         Meridia against fictional peer countries
+//   #/environment      air, waste, water and protected land
+//   #/digital          internet, mobile, e-government and broadband
+//   #/transport        public transport, cycling, electric cars and commutes
 //   #/releases        latest statistical releases
 //   #/methodology     about the figures
 //
@@ -17,6 +20,9 @@
 import { YEARS, SERIES } from './data.js';
 import { overview, population, economy, labour, health, education, regions, releases, methodology, missing } from './views.js';
 import { compare } from './compare.js';
+import { environment } from './environment.js';
+import { digital } from './digital.js';
+import { transport } from './transport.js';
 import { lineChart, barChart, PALETTE } from './charts.js';
 
 const app = document.getElementById('app');
@@ -35,6 +41,9 @@ const ROUTES = [
   { hash: '#/education', label: 'Education' },
   { hash: '#/regions', label: 'Regions' },
   { hash: '#/compare', label: 'Compare' },
+  { hash: '#/environment', label: 'Environment' },
+  { hash: '#/digital', label: 'Digital' },
+  { hash: '#/transport', label: 'Transport' },
   { hash: '#/releases', label: 'Releases' },
   { hash: '#/methodology', label: 'Methodology' },
 ];
@@ -115,6 +124,9 @@ function render() {
   else if (route === '/education') { html = education(); title = 'Education'; }
   else if (route === '/regions') { html = regions(regionState); title = 'Regions'; }
   else if (route === '/compare') { html = compare(); title = 'Compare countries'; }
+  else if (route === '/environment') { html = environment(); title = 'Environment'; }
+  else if (route === '/digital') { html = digital(); title = 'Digital'; }
+  else if (route === '/transport') { html = transport(); title = 'Transport'; }
   else if (route === '/releases') { html = releases(); title = 'Releases'; }
   else if (route === '/methodology') { html = methodology(); title = 'Methodology'; }
   else { html = missing(); title = 'Not found'; }

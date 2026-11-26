@@ -1,3 +1,13 @@
+// Post-opening revision note.
+// Three new sections were added after the competition opened: Environment
+// (air quality, recycling, protected land, water use and waste streams),
+// Digital (internet use, mobile subscriptions, e-government use and
+// broadband speed) and Transport (public transport, cycling, electric
+// cars and average commutes). Each new section is a pair of files — a data
+// module holding its own invented series and a view module that renders
+// it — wired into the router in app/main.js. Nothing else in this
+// entrypoint changed: it still copies app/ and screenshots/ to the output
+// directory and writes dossier.json exactly as the scorer expects.
 // Entry point for the Meridia national statistics site (Node 22, standard
 // library only). The site is the static files in app/ beside this file: a
 // browser opens app/index.html directly, and nothing it runs, styles or
